@@ -1,8 +1,9 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\User;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,43 +16,10 @@ use App\Models\User;
 |
 */
 
-Route::get('/user/{id}', function (string $id){
-    $user = User::where('id', $id)->first();
-    return response()->json($user);
-});
+Route::get('/user/{id}', [UserController::class, 'getById']);
 
-Route::post('/user', function (Request $request){
-    return response()->json(
-        User::create(
-            $request->validate([
-                'name' => ['required', 'nullable', 'string', 'max:150'],
-                'password' => ['required', 'string', 'min:4', 'max:100'],
-                'email' => ['required', 'email', 'unique:App\Models\User', 'max:100']
-            ])
-        )
-    );
-});
+Route::post('/user', [UserController::class, 'store']);
 
-Route::delete('/user/{id}', function (string $id){
-    User::where('id', $id)->delete();
+Route::delete('/user/{id}', [UserController::class, 'deleteById']);
 
-    return response()->json([
-        'status' => 'success',
-    ]);
-});
-
-Route::put('/user/{id}', function (Request $request, string $id){
-    $user = User::where('id', $id);
-
-    $updateArray = $request->validate([
-        'name' => ['nullable', 'string', 'max:150'],
-        'password' => ['string', 'min:4', 'max:100'],
-        'email' => ['email', 'unique:App\Models\User', 'max:100']
-    ]);
-
-    $user->update($updateArray);
-
-    return response()->json([
-        'status' => 'success'
-    ]);
-});
+Route::put('/user/{id}', [UserController::class, 'updateById']);
