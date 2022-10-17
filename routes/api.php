@@ -31,3 +31,10 @@ Route::get('/admin/info', [AdminController::class, 'getAdminByRequest'])->middle
     'auth:sanctum',
     'CheckAuthUser:App\Models\Admin'
 ]);
+
+Route::get('/test', function (){
+    $product = \App\Models\Product::inRandomOrder()->with('category')->first();
+    return [
+        'product' => $product,
+    ];
+});
