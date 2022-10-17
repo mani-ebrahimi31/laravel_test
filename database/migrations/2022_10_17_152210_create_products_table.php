@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('description', 1500)->nullable();
             $table->bigInteger('price')->default(0);
             $table->string('image', 150);
+            $table->string('category_id', 20);
             $table->timestamps();
         });
     }
